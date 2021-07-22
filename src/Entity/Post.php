@@ -148,4 +148,25 @@ class Post
 
         return $this;
     }
+
+    public function toModel(): \App\Model\Post
+    {
+        $model = new \App\Model\Post();
+        $model->title = $this->title;
+        $model->authorName = $this->authorName;
+        $model->publishedAt = $this->publishedAt;
+        $model->slug = $this->slug;
+        $model->summary = $this->summary;
+
+        /** @var PostComment $comment */
+        foreach ($this->comments as $comment) {
+            $postComment = new \App\Model\PostComment();
+            $postComment->content = $comment->getContent();
+            $postComment->authorName = $comment->getAuthorName();
+
+            $model->comments[] = $postComment;
+        }
+
+        return $model;
+    }
 }
